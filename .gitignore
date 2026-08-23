@@ -31,6 +31,10 @@ dev-server.log
 .vite/
 vite.config.*.timestamp-*
 
+# Vercel
+.vercel/
+.vercel_build_output/
+
 # TypeScript
 *.tsbuildinfo
 
