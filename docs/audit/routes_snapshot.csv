@@ -1,0 +1,42 @@
+﻿Route,Module,Component,Permission,RoleGuard,DataScope,Status,Problem
+/dashboard,dashboard,DashboardPage,,NONE,UNKNOWN,CRITICAL,No PermissionRoute/roles guard; renders global dashboard for every user
+/customers,customers,CustomersPage,customers.view,NONE,component-filtered,REVIEW,REP/SUP/DO/DIST/FIN/AUD all reach; scope enforced in component only
+/customers/new,customers,CustomerForm,customers.create,NONE,self/scope,CRITICAL,Conflates Target Customer vs Active Customer (Ch 3.12/3.15)
+/customers/:id,customers,Customer360Page,customers.view,NONE,scoped,REVIEW,Shared with supervisor/customers/:id; verify per-role field visibility
+/products,products,ProductsPage,products.view,NONE,company,KEEP
+/sales,sales,SalesPage,sales.view,NONE,scoped,REVIEW,No SalesOrder entity; sale entry via /rep/visit
+/sales/new,sales,NewSalePage,sales.create,NONE,scoped,CRITICAL,Only SM has sales.create; REP lacks submit/post
+/sales/:id,sales,InvoiceDetailPage,sales.view,NONE,scoped,REVIEW,Posted invoices must be read-only (Ch 3.31)
+/collections,collections,CollectionsPage,collections.view,NONE,scoped,REVIEW
+/returns,returns,ReturnsPage,returns.view,NONE,scoped,REVIEW
+/inventory,inventory,InventoryIndexPage,inventory.view,NONE,scoped,REVIEW
+/inventory/warehouse,inventory,WarehouseInventoryPage,inventory.view,GM+SM+SUP,company,KEEP,Role guard present
+/inventory/van,inventory,VanInventoryPage,inventory.view,NONE,UNKNOWN,CRITICAL,Duplicate of /rep/van; van stock is REP-scoped
+/inventory/transfers,inventory,TransfersPage,inventory.view,NONE,scoped,HIGH,Duplicate of /rep/stock-transfers
+/inventory/requests,inventory,RequestsPage,inventory.view,NONE,scoped,HIGH,Duplicate of /rep/stock-requests
+/inventory/movements,inventory,MovementsPage,inventory.view,NONE,scoped,REVIEW
+/cash,cash,CashPage,cash.view,NONE,scoped,REVIEW,Balance must derive from movements (Ch 3.14)
+/custody,custody,CustodyPage,custody.view,NONE,scoped,HIGH,Duplicate of /rep/custody
+/routes,routes,RoutesPage,routes.view,NONE,scoped,REVIEW
+/visits,visits,VisitsPage,visits.view,NONE,scoped,REVIEW
+/gps,gps,GpsPage,gps.view,NONE,scoped,HIGH,Duplicate of /rep/gps
+/targets,targets,TargetsPage,targets.view,NONE,scoped,REVIEW
+/credit,credit,CreditPage,credit.view,NONE,scoped,CRITICAL,Over-limit approval not wired (Ch 3.13)
+/approvals,approvals,ApprovalsPage,approvals.view,NONE,scoped,REVIEW
+/approvals/:id,approvals,ApprovalDetailPage,approvals.view,NONE,scoped,REVIEW,Verify SoD (no self-approve)
+/profitability,profitability,ProfitabilityPage,profitability.view,NONE,scoped,HIGH,Uses live cost; no CostSnapshot (Ch 3.15/3.21)
+/commission,commission,CommissionPage,commission.view,NONE,scoped(rep own),KEEP,New; state OK
+/policy,policy,PolicyCenterPage,settings.manage,GM+NONE,company,CRITICAL,No version/approval/audit trail (Ch 3.24/3.33)
+/audit,audit,AuditPage,audit.view,NONE,scoped(read),REVIEW
+/distribution-officer,distribution-officer,DistributionOfficerPage,distributor.manage,NONE,VIOLATION_company,CRITICAL,API does not scope DO network
+/distributor,distributor,DistributorPage,distributor.view,NONE,VIOLATION_company,CRITICAL,API does not scope to own entity
+/reports,reports,ReportsPage,reports.view,NONE,scoped,REVIEW
+/archive,archive,ArchivePage,archive.view,NONE,scoped,HIGH,No version/lock/append-only enforcement (Ch 3.24)
+/messages,messages,MessagesPage,messages.view,NONE,conversation-scoped,HIGH,Split component with /rep/messages
+/leaves,leaves,LeavesPage,leaves.view,NONE,scoped,REVIEW,State-machine unverified
+/users,users,UsersPage,users.view,NONE,company,REVIEW,HUMAN_DECISION: FIN/AUD lack users.manage (correct) but verify read scope
+/organization,organization,OrganizationPage,organization.manage,GM+HR,company,REVIEW
+/settings,settings,SettingsPage,settings.view,NONE,company,REVIEW,SM has settings.view (read ok)
+/dev/scope-test,dev,DataScopeTestPage,,NONE,NONE,CRITICAL,Dev route in prod build; no auth guard
+/rep/*,rep,various,trips.view/closing.view/etc,REP,NONE,MEDIUM,Duplicate scoped views of generic modules
+/supervisor/*,supervisor,various,supervisor.*,SUP,team,KEEP,Team-monitoring view; not a REP duplicate

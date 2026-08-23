@@ -1,0 +1,47 @@
+{
+  "generated_from": "src/services/scope.ts",
+  "data_scope_model": "DataScope { role, userId, scopeType (self|team|branch|company), territoryId?, branchId?, supervisorId? }",
+  "get_data_scope": {
+    "REPRESENTATIVE": "self (territory+branch+supervisor)",
+    "SUPERVISOR": "team",
+    "SALES_MANAGER": "branch",
+    "default (GM, DO, DIST, FIN, AUD, HR)": "company"
+  },
+  "scope_type_meaning": {
+    "self": "own data + customers assigned to the rep",
+    "team": "own reps + their customers (repId === scope.userId OR rep.supervisorId === scope.supervisorId)",
+    "branch": "branch data; company-wide views preserved (e.g., routes/visits for SM)",
+    "company": "global (default fallback)"
+  },
+  "canAccess_functions": {
+    "canAccessCustomer": "self/team→owner; branch/company→true",
+    "canAccessInvoice": "company/branch→true; else isRep(scope,i.repId)",
+    "canAccessVisit": "company/branch→true; else isRep",
+    "canAccessCollection": "company/branch→true; else isRep",
+    "canAccessReturn": "company/branch→true; else isRep",
+    "canAccessRoute": "company/branch→true; else isRep",
+    "canAccessVanStock": "company/branch→true; else isRep",
+    "canAccessStockRequest": "company/branch→true; else isRep",
+    "canAccessStockTransfer": "company/branch→true; else isRep(t.toRepId)  [NOTE: only receiver filtered, NOT sender]",
+    "canAccessStockMovement": "company/branch→true; else isRep",
+    "canAccessCashBox": "company/branch→true; else isUser(scope,b.ownerId)",
+    "canAccessCashMovement": "company/branch→true; else ownBoxIds.includes || isRep(scope,m.relatedRepId)",
+    "canAccessGps": "only isUser(scope,g.userId)  [NOTE: team/branch/company canNOT see team GPS unless isUser — team GPS likely broken for SUP]",
+    "canAccessTarget": "company/branch→true; isUser; or team territory owner",
+    "canAccessApproval": "self→requestedById===userId; else isUser",
+    "canAccessProfitability": "company/branch→true; else isRep(p.repId)",
+    "canAccessCustody": "self→assignedToId===userId; else isUser",
+    "canAccessLeave": "self→employeeId===userId; else isUser",
+    "canAccessConversation": "participants.includes(scope.userId) — strict",
+    "canAccessTerritory": "company/branch→true; team→own or supervisor; else own",
+    "canAccessNotification": "self→recipientId===userId; else !recipientId || isUser",
+    "canAccessArchive": "company/branch→true; else team/self via createdBy name match"
+  },
+  "findings": [
+    "CRITICAL: canAccessGps uses isUser only — for SUPERVISOR 'team' scope, users are resolved but GPS records are keyed by userId (rep); SUP viewing team GPS requires visibleUserIds to include team reps (it does) and canAccessGps to check isUser(scope, g.userId) — passes only if g.userId is in visibleUserIds. SUP team scope visibleUserIds includes team reps, so SUP CAN see team GPS. OK, but REP 'self' scope visibleUserIds = [userId, supervisorId]; canAccessGps(g.userId===rep) passes. Rep sees own GPS — correct. Verified logic OK.",
+    "Issue: canAccessStockTransfer only checks t.toRepId (receiver). Sender (toRepId) filtering only; a sender rep could see outgoing transfers they shouldn't, or rep A could see transfers addressed to rep B only (by toRepId). REP 'self' sees transfers where toRepId===self — correct for receiving. But REP-created transfers (from REP) are not filterable by sender — acceptable if sender sees via 'createdBy' elsewhere.",
+    "Issue: DO/DIST/FIN/AUD/HR all fall into default 'company' scope. A Distributor logging in would see ALL distributors' data (scopeType=company) — VIOLATION of Chapter 3 3.6/3.7.5 (DIST must see own entity only). Needs DistributorDataScope by distributorId.",
+    "Issue: DistributionOfficer uses company scope — sees all distributors' sell-in/sell-out regardless of network. Needs DO network scope (managed distributors).",
+    "Issue: Financial roles (FIN) get company scope over Customers/Invoices/Returns — Finance per Chapter 3 3.5 only needs Cash/Cost/Collections/Profitability, not edit all."
+  ]
+}

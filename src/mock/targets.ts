@@ -1,0 +1,18 @@
+import type { Target } from "@/types";
+
+export const targets: Target[] = [
+  { id: "tg-001", period: "monthly", ownerId: "u-rp-01", ownerType: "rep", salesAmount: 120000, collectionAmount: 95000, visitsCount: 100, newCustomersCount: 4, startDate: "2026-08-01", endDate: "2026-08-31", status: "approved", approvedBy: "سالم الهاجري", createdAt: "2026-07-30" },
+  { id: "tg-002", period: "monthly", ownerId: "u-rp-02", ownerType: "rep", salesAmount: 90000, collectionAmount: 70000, visitsCount: 90, newCustomersCount: 3, startDate: "2026-08-01", endDate: "2026-08-31", status: "approved", approvedBy: "سالم الهاجري", createdAt: "2026-07-30" },
+  { id: "tg-003", period: "monthly", ownerId: "u-rp-03", ownerType: "rep", salesAmount: 110000, collectionAmount: 80000, visitsCount: 95, newCustomersCount: 3, startDate: "2026-08-01", endDate: "2026-08-31", status: "approved", approvedBy: "ناصر القحطاني", createdAt: "2026-07-30" },
+  { id: "tg-004", period: "monthly", ownerId: "u-rp-04", ownerType: "rep", salesAmount: 85000, collectionAmount: 65000, visitsCount: 85, newCustomersCount: 2, startDate: "2026-08-01", endDate: "2026-08-31", status: "approved", approvedBy: "ناصر القحطاني", createdAt: "2026-07-30" },
+  { id: "tg-005", period: "monthly", ownerId: "u-rp-05", ownerType: "rep", salesAmount: 100000, collectionAmount: 78000, visitsCount: 90, newCustomersCount: 3, startDate: "2026-08-01", endDate: "2026-08-31", status: "approved", approvedBy: "ماجد خالد الشمري", createdAt: "2026-07-30" },
+  { id: "tg-006", period: "monthly", ownerId: "u-sp-01", ownerType: "supervisor", salesAmount: 210000, collectionAmount: 165000, visitsCount: 190, newCustomersCount: 7, startDate: "2026-08-01", endDate: "2026-08-31", status: "approved", approvedBy: "فهد المطيري", createdAt: "2026-07-28" },
+  { id: "tg-007", period: "monthly", ownerId: "u-sp-02", ownerType: "supervisor", salesAmount: 195000, collectionAmount: 145000, visitsCount: 180, newCustomersCount: 5, startDate: "2026-08-01", endDate: "2026-08-31", status: "approved", approvedBy: "فهد المطيري", createdAt: "2026-07-28" },
+  { id: "tg-008", period: "monthly", ownerId: "t-01", ownerType: "territory", salesAmount: 210000, collectionAmount: 165000, visitsCount: 190, newCustomersCount: 7, startDate: "2026-08-01", endDate: "2026-08-31", status: "under_review", createdAt: "2026-08-01" },
+  { id: "tg-009", period: "monthly", ownerId: "u-sp-03", ownerType: "supervisor", salesAmount: 130000, collectionAmount: 100000, visitsCount: 160, newCustomersCount: 5, startDate: "2026-08-01", endDate: "2026-08-31", status: "approved", approvedBy: "فهد المطيري", createdAt: "2026-07-28" },
+  { id: "tg-010", period: "daily", ownerId: "u-rp-01", ownerType: "rep", salesAmount: 5000, collectionAmount: 4000, visitsCount: 8, newCustomersCount: 0, startDate: "2026-08-14", endDate: "2026-08-14", status: "approved", approvedBy: "سالم الهاجري", createdAt: "2026-08-13" },
+  { id: "tg-011", period: "daily", ownerId: "u-rp-02", ownerType: "rep", salesAmount: 4000, collectionAmount: 3000, visitsCount: 7, newCustomersCount: 0, startDate: "2026-08-14", endDate: "2026-08-14", status: "approved", approvedBy: "سالم الهاجري", createdAt: "2026-08-13" },
+];
+
+export const targetsByOwner = (ownerId: string) => targets.filter((t) => t.ownerId === ownerId);
+export const targetByRepMonth = (repId: string) => targets.find((t) => t.ownerId === repId && t.period === "monthly");

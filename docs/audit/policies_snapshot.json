@@ -1,0 +1,48 @@
+{
+  "generated_from": ["src/config/repPolicies.ts", "src/config/supervisorPolicies.ts"],
+  "note": "As-built policy/configuration objects. Chapter 3 3.24/3.33 require every policy to have Owner + Version + Effective Date + Approval + Audit. Current objects are untyped const literals with NO version/audit trail.",
+  "repPolicies": {
+    "vehicleAssignment": "optional",
+    "gpsRequiredForTrip": true,
+    "startTripChecks": ["route_approved","gps_enabled","van_stock_loaded","cashbox_initialized"],
+    "credit": { "warnAtPercent": 90, "blockWhenExceeded": true },
+    "discount": { "maxRateWithoutApproval": 5, "approvalThresholdAmount": 500 },
+    "stockRequestIncreasesVanOnReceiptOnly": true,
+    "transferReceiptRequired": true,
+    "countGeneratesAdjustment": true,
+    "closingTabs": ["overview","cash","inventory","expenses","submit"],
+    "closingRequiresTripCompleted": false,
+    "expenses": { "maxWithoutApproval": 200 },
+    "sync": { "autoSync": true, "offlineQueue": true, "retryMax": 3 },
+    "messagesAllowedRoles": ["SUPERVISOR","SALES_MANAGER"]
+  },
+  "supervisorPolicies": {
+    "teamSizeLimit": 10,
+    "planningPeriods": ["daily","weekly","monthly","yearly"],
+    "stockTransferPolicy": { "scope":"team","productScope":"all","quantityLimitPerTransaction":500,"approvalRequired":false,"receivingRequired":true,"ownTransfersAllowed":false },
+    "crossTerritoryAllowed": true,
+    "customerTransfer": { "allowed":true,"requiresApproval":false,"debtResponsibility":"new_rep","preserveHistory":true },
+    "assetApprovalWorkflow": { "role":"SALES_MANAGER","supervisorCannotApproveOwn":true,"requiresReason":true,"requiresAttachments":true },
+    "gps": { "intervalMinutes":5,"showLiveVsSynced":true,"offlineAfterMinutes":30,"deviationThresholdMeters":200 },
+    "features": { "supervisorWarehouse":true,"supervisorCashBox":true,"planningTargets":true,"customerTransfers":true,"communications":true,"quantitativeTargets":true },
+    "communicationScope": { "allowedRoles":["REPRESENTATIVE","SALES_MANAGER","GENERAL_MANAGER"],"ownTeamOnly":true },
+    "planning": { "planApprovalRole":"SUPERVISOR","targetsApprovalRole":"SALES_MANAGER","targetPeriods":["daily","weekly","monthly","yearly"] },
+    "closing": { "frequency":"daily","varianceThresholdAmount":50,"varianceApprovalRequired":true },
+    "exceptionThresholds": { "lateVisitMinutes":30,"routeDeviationThresholdMeters":300,"debtOverdueDays":90,"stockVarianceThresholdQty":5 },
+    "activePeriod": { "currentMonth":"2026-08","previousMonth":"2026-07" }
+  },
+  "policyCenterConfig": {
+    "source": "src/mock/policy.ts",
+    "fields": ["credit","discount","stock","gps","closing","expenses","distributor","costMethod","debtResponsibility"],
+    "hasVersion": true,
+    "hasAuditTrail": false,
+    "hasOwner": false,
+    "hasEffectiveDate": false
+  },
+  "findings": [
+    "repPolicies and supervisorPolicies are TWO separate config files — Chapter 3 3.24/3.33 wants a single Configuration center with unified policy objects (Commission/credit/discount/inventory/GPS/closing/distributor/cost-method). Should consolidate under PolicyCenter with versioning + audit.",
+    "No CostSnapshot/CostMethod versioning; profitability uses live cost (Chapter 3 3.15/3.21 violation).",
+    "Distributor policy + debt-responsibility + cost-method exist only in PolicyCenter mock, not wired to repPolicies (inconsistent source of truth).",
+    "Supervisor feature toggles (supervisorWarehouse/supervisorCashBox) are good (Chapter 3 3.33 feature flags) but not surfaced in Configuration UI."
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "canonical_roles": {
+    "REP": "REPRESENTATIVE",
+    "SUP": "SUPERVISOR",
+    "SM": "SALES_MANAGER",
+    "DO": "DISTRIBUTION_OFFICER",
+    "DIST": "DISTRIBUTOR",
+    "FIN": "FINANCE",
+    "GM": "GENERAL_MANAGER",
+    "AUD": "AUDITOR",
+    "HR": "HR"
+  },
+  "note": "SYS/System Administrator role is NOT yet present in the code (Chapter 3 3.7.6 / 3.25/3.33 require it). WH/Warehouse role is NOT a dedicated role; warehouse functions are managed under SUP/SM/GM via inventory.scope.",
+  "roles": {
+    "GENERAL_MANAGER (GM)": {
+      "scope": "company",
+      "permissions": [
+        "dashboard.view", "customers.view", "customers.transfer", "customers.deactivate", "customers.assign",
+        "products.view", "products.edit", "pricing.view", "pricing.approve",
+        "sales.view", "sales.cancel",
+        "collections.view",
+        "returns.view", "returns.approve",
+        "inventory.view", "inventory.transfer", "inventory.count",
+        "cash.view", "cash.settle",
+        "routes.view", "routes.approve",
+        "visits.view", "gps.view",
+        "targets.view", "targets.approve",
+        "credit.view", "credit.approve", "discount.approve",
+        "approvals.view", "approvals.review",
+        "profitability.view",
+        "reports.view", "reports.export",
+        "custody.view", "custody.manage",
+        "archive.view", "archive.edit", "archive.override",
+        "messages.view",
+        "leaves.view", "leaves.approve",
+        "users.view", "users.manage", "roles.manage",
+        "organization.manage",
+        "settings.view", "settings.manage",
+        "trips.view", "closing.view", "sync.view", "expenses.view", "loading.view", "count.view", "deposit.view", "targets.org.view",
+        "commission.view", "commission.approve", "commission.export",
+        "bonus.view", "bonus.approve",
+        "audit.view", "distributor.view", "distributor.manage"
+      ]
+    },
+    "SALES_MANAGER (SM)": {
+      "scope": "branch",
+      "permissions": [
+        "dashboard.view",
+        "customers.view", "customers.create", "customers.edit", "customers.transfer", "customers.deactivate", "customers.assign",
+        "products.view", "products.edit", "pricing.view", "pricing.approve",
+        "sales.view", "sales.cancel",
+        "collections.view", "returns.view", "returns.approve",
+        "inventory.view", "inventory.transfer", "inventory.count",
+        "cash.view", "cash.settle",
+        "routes.view", "routes.create", "routes.approve",
+        "visits.view", "gps.view",
+        "targets.view", "targets.create", "targets.approve",
+        "credit.view", "credit.approve", "discount.approve",
+        "approvals.view", "approvals.review",
+        "profitability.view",
+        "reports.view", "reports.export",
+        "custody.view",
+        "archive.view",
+        "messages.view",
+        "leaves.view", "leaves.approve",
+        "settings.view",
+        "trips.view", "closing.view", "sync.view", "expenses.view", "loading.view", "count.view", "deposit.view", "targets.org.view",
+        "commission.view", "bonus.view",
+        "audit.view", "distributor.view", "distributor.manage"
+      ]
+    },
+    "SUPERVISOR (SUP)": {
+      "scope": "team",
+      "permissions": [
+        "dashboard.view",
+        "customers.view", "customers.transfer", "customers.deactivate",
+        "products.view", "pricing.view",
+        "sales.view",
+        "collections.view", "returns.view", "returns.approve",
+        "inventory.view", "inventory.transfer",
+        "cash.view", "cash.settle",
+        "routes.view", "routes.create", "routes.approve",
+        "visits.view", "gps.view",
+        "targets.view", "targets.create",
+        "credit.view",
+        "approvals.view", "approvals.review",
+        "reports.view", "custody.view", "archive.view", "messages.view",
+        "leaves.view", "leaves.approve",
+        "supervisor.team", "supervisor.planning", "supervisor.field",
+        "supervisor.customers", "supervisor.inventory", "supervisor.cash",
+        "supervisor.assets", "supervisor.comms", "supervisor.requests", "supervisor.activity"
+      ]
+    },
+    "REPRESENTATIVE (REP)": {
+      "scope": "self",
+      "permissions": [
+        "dashboard.view", "customers.view",
+        "products.view", "pricing.view",
+        "sales.view", "sales.create",
+        "collections.view", "collections.create",
+        "returns.view", "returns.create",
+        "inventory.view", "inventory.request",
+        "cash.view",
+        "routes.view",
+        "visits.view", "visits.create",
+        "gps.view", "targets.view", "messages.view", "reports.view",
+        "leaves.view", "leaves.create",
+        "archive.view", "custody.view",
+        "trips.view", "trips.start",
+        "closing.view", "closing.create",
+        "sync.view",
+        "expenses.view", "expenses.create",
+        "loading.view", "loading.receive",
+        "count.view", "count.create",
+        "deposit.view", "deposit.create",
+        "targets.org.view", "targets.org.create",
+        "commission.view", "bonus.view"
+      ]
+    },
+    "DISTRIBUTION_OFFICER (DO)": {
+      "scope": "company (intended: distribution network)",
+      "permissions": [
+        "dashboard.view", "customers.view",
+        "inventory.view", "inventory.transfer",
+        "routes.view", "routes.create", "routes.approve",
+        "visits.view", "gps.view", "targets.view",
+        "reports.view", "messages.view", "approvals.view",
+        "profitability.view",
+        "distributor.view", "distributor.manage"
+      ]
+    },
+    "DISTRIBUTOR (DIST)": {
+      "scope": "self (intended: own distributor entity)",
+      "permissions": [
+        "dashboard.view", "distributor.view",
+        "sales.view", "inventory.view", "customers.view",
+        "reports.view", "messages.view", "profitability.view"
+      ]
+    },
+    "FINANCE (FIN)": {
+      "scope": "company",
+      "permissions": [
+        "dashboard.view", "customers.view",
+        "sales.view", "sales.cancel",
+        "collections.view", "returns.view",
+        "inventory.view", "cash.view", "cash.settle",
+        "credit.view", "credit.approve", "discount.approve",
+        "approvals.view", "approvals.review",
+        "profitability.view", "reports.view",
+        "commission.view", "commission.approve", "commission.export",
+        "bonus.view", "bonus.approve",
+        "archive.view", "messages.view", "expenses.view", "closing.view"
+      ]
+    },
+    "AUDITOR (AUD)": {
+      "scope": "company (read-only)",
+      "permissions": [
+        "dashboard.view",
+        "customers.view", "sales.view", "collections.view", "returns.view",
+        "inventory.view", "cash.view", "approvals.view", "profitability.view", "reports.view",
+        "audit.view", "archive.view", "custody.view",
+        "routes.view", "visits.view", "gps.view", "targets.view", "credit.view",
+        "messages.view", "users.view"
+      ]
+    },
+    "HR": {
+      "scope": "branch/company (read)",
+      "permissions": [
+        "dashboard.view", "customers.view",
+        "leaves.view", "leaves.approve",
+        "users.view", "users.manage", "roles.manage", "organization.manage",
+        "messages.view", "archive.view", "reports.view", "routes.view"
+      ]
+    }
+  },
+  "findings": [
+    "SYS/SystemAdministrator role missing entirely (Chapter 3 3.7.6).",
+    "WH/Warehouse is not a dedicated role; warehouse ops are owned by SUP/SM/GM (acceptable per 3.4 hierarchy where Warehouse is a function/role; not modeled).",
+    "HR has users.manage/roles.manage/organization.manage — acceptable as HR admin function (3.5).",
+    "FIN has commission.approve/export + bonus.approve — acceptable per stakeholder table (Finance oversees payments). FIN lacks audit.view (Chapter 3 3.25/3.34 not explicit; auditor owns audit)."
+  ]
+}
