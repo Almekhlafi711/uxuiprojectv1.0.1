@@ -73,10 +73,11 @@ export function CustomerAssignmentPage() {
       toast.error("يرجى ملء جميع الحقول"); return;
     }
     try {
+      const actor = user?.id ?? "system";
       if (selectedCustomerIds.length === 1) {
-        await organizationService.assignCustomerToRep(selectedCustomerIds[0], assignRep, assignTerritory, assignSupervisor, assignReason);
+        await organizationService.assignCustomerToRep(selectedCustomerIds[0], assignRep, assignTerritory, assignSupervisor, assignReason, actor);
       } else {
-        await organizationService.bulkAssignCustomers(selectedCustomerIds, assignRep, assignTerritory, assignSupervisor, assignReason);
+        await organizationService.bulkAssignCustomers(selectedCustomerIds, assignRep, assignTerritory, assignSupervisor, assignReason, actor);
       }
       toast.success(`تم تعيين ${selectedCustomerIds.length} عميل بنجاح`);
       setAssignModal(false);
@@ -115,9 +116,9 @@ export function CustomerAssignmentPage() {
     {
       key: "isAssigned", header: "الحالة",
       render: (r) => r.isAssigned ? (
-        <Badge tone="success" icon={<CheckCircle size={11} />}>معيّن لـ {r.assignment?.repName}</Badge>
+        <Badge tone="success"><span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}><CheckCircle size={11} /> معيّن لـ {r.assignment?.repName}</span></Badge>
       ) : (
-        <Badge tone="danger" icon={<AlertTriangle size={11} />}>غير معيّن</Badge>
+        <Badge tone="danger"><span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}><AlertTriangle size={11} /> غير معيّن</span></Badge>
       ),
     },
     {

@@ -39,6 +39,7 @@ export type Status =
   | "inspection"
   | "posted"
   | "received"
+  | "sent"
   | "executed"
   | "partially_paid"
   | "in_transit"

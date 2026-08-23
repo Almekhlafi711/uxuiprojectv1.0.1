@@ -29,7 +29,8 @@ export type TransitionAction =
   | "return"
   | "inspect"
   | "accept"
-  | "send";
+  | "send"
+  | "transit";
 
 export interface CheckActor {
   id: string;
@@ -84,6 +85,7 @@ const ACTION_TARGET: Record<TransitionAction, { to: string; permission: string }
   inspect: { to: "inspection", permission: "returns.inspect" },
   accept: { to: "accepted", permission: "inventory.transfer.accept" },
   send: { to: "sent", permission: "inventory.transfer.send" },
+  transit: { to: "in_transit", permission: "inventory.transfer.send" },
 };
 
 /**

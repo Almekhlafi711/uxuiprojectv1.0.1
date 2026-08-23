@@ -46,10 +46,10 @@ export function CustomerTransferPage() {
   }
 
   const tabs = useMemo(() => [
-    { key: "pending", label: `معلّق (${requests.filter(r => r.status === "pending").length})` },
-    { key: "approved", label: `معتمد (${requests.filter(r => r.status === "approved").length})` },
-    { key: "rejected", label: `مرفوض (${requests.filter(r => r.status === "rejected").length})` },
-    { key: "executed", label: `منفّذ (${requests.filter(r => r.status === "executed").length})` },
+    { key: "pending", label: `معلّق (${requests.filter(r => r.status === "pending").length})`, content: null },
+    { key: "approved", label: `معتمد (${requests.filter(r => r.status === "approved").length})`, content: null },
+    { key: "rejected", label: `مرفوض (${requests.filter(r => r.status === "rejected").length})`, content: null },
+    { key: "executed", label: `منفّذ (${requests.filter(r => r.status === "executed").length})`, content: null },
   ], [requests]);
 
   const filtered = useMemo(() => requests.filter(r => r.status === activeTab), [requests, activeTab]);
@@ -70,7 +70,8 @@ export function CustomerTransferPage() {
       toast.error(`لا يمكن النقل: ${v.blockers.join(", ")}`); return;
     }
     try {
-      await organizationService.createCustomerTransfer(transferCustomerId, transferNewRep, transferReason, transferDebt, v);
+      const actor = user?.id ?? "system";
+      await organizationService.createCustomerTransfer(transferCustomerId, transferNewRep, transferReason, transferDebt, actor, v);
       toast.success("تم إنشاء طلب النقل بنجاح");
       setNewTransferModal(false);
       resetTransferForm();
@@ -80,14 +81,16 @@ export function CustomerTransferPage() {
 
   async function handleApprove(id: string) {
     try {
-      await organizationService.approveCustomerTransfer(id);
+      const actor = user?.id ?? "system";
+      await organizationService.approveCustomerTransfer(id, actor);
       toast.success("تم اعتماد طلب النقل"); await loadData();
     } catch (err: any) { toast.error(err.message); }
   }
 
   async function handleExecute(id: string) {
     try {
-      await organizationService.executeCustomerTransfer(id);
+      const actor = user?.id ?? "system";
+      await organizationService.executeCustomerTransfer(id, actor);
       toast.success("تم تنفيذ النقل بنجاح"); await loadData();
     } catch (err: any) { toast.error(err.message); }
   }
@@ -95,7 +98,8 @@ export function CustomerTransferPage() {
   async function handleReject() {
     if (!rejectReason.trim()) { toast.error("يرجى إدخال سبب الرفض"); return; }
     try {
-      await organizationService.rejectCustomerTransfer(rejectModal.id, rejectReason);
+      const actor = user?.id ?? "system";
+      await organizationService.rejectCustomerTransfer(rejectModal.id, actor, rejectReason);
       toast.success("تم رفض طلب النقل");
       setRejectModal({ open: false, id: "" }); setRejectReason(""); await loadData();
     } catch (err: any) { toast.error(err.message); }
